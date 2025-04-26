@@ -13,6 +13,11 @@ require "config.php";
   <meta charset="UTF-8">
   <title>Like and Dislike System</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="" crossorigin="anonymous">
+  <style>
+    .red{
+      background-color: red;
+    }
+  </style>
   <script>
     function UpdateRecord(id, val) {
       $.ajax({
@@ -33,7 +38,11 @@ require "config.php";
                     <div class="card-body">
                         <h5 class="card-title"><?php echo $row->title; ?></h5>
                         <p class="card-text"><?php echo $row->body; ?></p>
-                        <button class="btn btn-primary mr-5"  onClick="UpdateRecord(<?php echo $row->id; ?>, <?php echo $row->likes + 1; ?>)">like</button><span><?php echo $row->likes; ?></span> 
+                        <?php if($row->likes == 0) : ?>
+                        <button class="btn btn-primary mr-5" onClick="UpdateRecord(<?php echo $row->id; ?>, <?php echo $row->likes + 1; ?>)">Like</button><span><?php echo $row->likes; ?></span> 
+                        <?php else : ?>
+                          <button class="red btn btn-primary mr-5"  onClick="UpdateRecord(<?php echo $row->id; ?>, <?php echo $row->likes - 1; ?>)">Liked</button><span><?php echo $row->likes; ?></span> 
+                          <?php endif; ?> 
                     </div>
               </div>
               <br>
@@ -52,6 +61,25 @@ require "config.php";
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>      
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" ></script>
+
+  <script>
+    $(document).ready(function() {
+      $("button").click(function() {
+        if($(this).text() == "like") {
+            $(this).text("liked");
+        } else {
+            $(this).text("like");
+        };
+
+        function withoutRef(){
+          setInterval(function(){
+            $("body").load("index.php");
+          }, 1000);
+        }
+        withoutRef();
+      });
+    });
+  </script>
 
 </body>
 </html>
